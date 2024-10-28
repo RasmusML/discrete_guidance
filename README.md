@@ -12,4 +12,4 @@
 
 ### Installation
 * First create a new conda environment with, for example, `ENV_NAME=discrete_guidance; conda create -n $ENV_NAME --yes python=3.9`
-* Run `./install.sh $ENV_NAME`
+* Run `conda activate $ENV_NAME; ./install.sh $ENV_NAME`
