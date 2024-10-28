@@ -138,7 +138,7 @@ if __name__ == "__main__":
 
     args = parse_args()
 
-    scaler = torch.cuda.amp.GradScaler()
+    scaler = torch.amp.GradScaler('cuda')
 
     device = torch.device("cuda:0" if (torch.cuda.is_available()) else "cpu")
 
