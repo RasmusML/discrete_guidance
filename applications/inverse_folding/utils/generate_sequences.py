@@ -70,7 +70,7 @@ if __name__ == "__main__":
         denoising_model = lambda xt, t: model.decode(h_V, h_E, E_idx, xt, mask_attend, mask, chain_M)[1]
 
     noisy_classifier = StabilityPMPNN.init()
-    noisy_classifier.load_state_dict(torch.load(args.predictor_weights))
+    noisy_classifier.load_state_dict(torch.load(args.predictor_weights, weights_only=False))
     if use_tag:
         # need one-hot-encoded input to take gradients
         layer = nn.Linear(21, 128, bias=False)

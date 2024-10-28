@@ -116,7 +116,7 @@ if __name__ == "__main__":
             loss.backward()
             opt.step()
             losses_per_batch[batch_idx] = loss.item()
-            train_pbar.set_postfix(loss=losses_per_batch[:batch_idx].mean())
+            train_pbar.set_postfix(loss=losses_per_batch[:batch_idx+1].mean())
             train_ys.append(y.cpu().detach().numpy())
             train_yhats.append(yhat.cpu().detach().numpy())
 

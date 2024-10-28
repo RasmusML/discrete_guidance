@@ -73,10 +73,10 @@ if True:
 
 # load loaders
 loader_train = torch.load(
-    ROCKLIN_DIR / 'train_loader.pt'
+    ROCKLIN_DIR / 'train_loader.pt', weights_only=False
 )
 loader_val = torch.load(
-    ROCKLIN_DIR / 'val_loader.pt'
+    ROCKLIN_DIR / 'val_loader.pt', weights_only=False
 )
 
 val_names = list(set([x['cluster'] for b in tqdm(loader_val) for x in b]))
