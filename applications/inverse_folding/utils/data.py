@@ -1,9 +1,6 @@
-import Bio
 import torch
 import copy
-#from torch_geometric.data import Dataset, download_url, Batch, Data
 from torch.utils.data import Dataset
-from Bio.Data.IUPACData import protein_letters_3to1
 import torch.nn.functional as F
 from pathlib import Path
 import pandas as pd
@@ -109,7 +106,7 @@ def process_rocklin_data():
         rocklin_df.WT_cluster = rocklin_df.WT_cluster.astype(str)
     else:
         csv_fn = ROCKLIN_DIR / 'Tsuboyama2023_Dataset2_Dataset3_20230416.csv'
-        rocklin_df = pd.read_csv(csv_fn)
+        rocklin_df = pd.read_csv(csv_fn, low_memory=False)
         rocklin_df = rocklin_df[rocklin_df.dG_ML !=
                                 '-']  # filter unreliable delta Gs
         rocklin_df.loc[rocklin_df.dG_ML == '>5', "dG_ML"] = '5'
@@ -148,7 +145,7 @@ def process_rocklin_data():
 
 
 def generate_train_val_split(rocklin_df):
-    name_to_graph = torch.load(ROCKLIN_DIR / 'name_to_graph.pt')
+    name_to_graph = torch.load(ROCKLIN_DIR / 'name_to_graph.pt', weights_only=False)
     names, counts = zip(
         *rocklin_df.WT_cluster.value_counts().reset_index().values
     )  #zip(*rocklin_df.WT_cluster.map(str).value_counts().reset_index().values)
@@ -188,7 +185,7 @@ def generate_train_val_split(rocklin_df):
 
 
 def rocklin_df_to_dataset(rocklin_df):
-    name_to_graph = torch.load(ROCKLIN_DIR / 'name_to_graph.pt')
+    name_to_graph = torch.load(ROCKLIN_DIR / 'name_to_graph.pt', weights_only=False)
     data = []
     for row in rocklin_df.loc[:, [
             'name', 'aa_seq', 'WT_cluster', 'WT_name', 'dG_ML', 'WT_dG'
@@ -204,7 +201,7 @@ def rocklin_df_to_dataset(rocklin_df):
 
 
 def df_to_dataset(df):
-    name_to_graph = torch.load(ROCKLIN_DIR / 'name_to_graph.pt')
+    name_to_graph = torch.load(ROCKLIN_DIR / 'name_to_graph.pt', weights_only=False)
     data = []
     for row in df.loc[:, ['seqs', 'labels', 'WT_name']].values:
         aa_seq, label, pdb = row
