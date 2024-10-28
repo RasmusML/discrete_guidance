@@ -9,7 +9,6 @@ setup.py
 *-checkpoint.ipynb
 tmp/
 applications/illustration/.gitignore
-applications/inverse_folding/utils/rocklin_data/
 applications/inverse_folding/gfp/
 applications/molecules/.gitignore
 applications/cifar10/.gitignore
