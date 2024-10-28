@@ -1,0 +1,4 @@
+sampler:
+  grad_approx: true
+  guide_temp: 1
+trained_run_folder_dir: ./trained/DTDM

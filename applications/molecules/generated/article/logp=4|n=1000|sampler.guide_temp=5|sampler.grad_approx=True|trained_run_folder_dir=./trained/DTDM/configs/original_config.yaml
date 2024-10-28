@@ -1,0 +1,20 @@
+base_dir: .
+device: cuda
+eps_ratio: 1e-9
+num_gpus: 1
+sampler:
+  argmax_final: true
+  batch_size: 100
+  do_purity_sampling: false
+  dt: 0.001
+  grad_approx: false
+  guide_temp: 0.5
+  max_iterations: 100000
+  max_t: 0.98
+  noise: 30.0
+  purity_temp: 1.0
+  sample_zero_time_pads: true
+  seed: 30
+  x1_temp: 1.0
+state: generation
+trained_run_folder_dir: ./trained/CTFM

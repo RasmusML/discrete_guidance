@@ -1,0 +1,3 @@
+sampler:
+  grad_approx: true
+trained_run_folder_dir: ./trained/DTDM

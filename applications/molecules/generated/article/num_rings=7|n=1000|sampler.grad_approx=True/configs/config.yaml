@@ -1,0 +1,261 @@
+base_dir: .
+checkpoints_dir: generated/2024-08-11/num_rings=7|n=1000|sampler.grad_approx=True/checkpoints
+configs_dir: generated/2024-08-11/num_rings=7|n=1000|sampler.grad_approx=True/configs
+data:
+  S: 32
+  categorical: true
+  dataloaders:
+    train:
+      batch_size: 256
+    validation:
+      batch_size: 256
+  pad_index: 30
+  preprocessing:
+    filter_order:
+    - mol_weight
+    - num_tokens
+    - num_rings
+    - logp
+    filter_range_dict:
+      logp:
+      - -3
+      - 10
+      mol_weight:
+      - 0
+      - 750
+      num_rings:
+      - 0
+      - 7
+      num_tokens:
+      - 0
+      - 100
+    property_data_sampling_dict:
+      logp:
+        fraction: 1.0
+        seed: 101
+        stratify: false
+        use_max_num_bins: false
+      num_heavy_atoms:
+        fraction: 1.0
+        seed: 102
+        stratify: false
+        use_max_num_bins: false
+      num_rings:
+        fraction: 1.0
+        seed: 100
+        stratify: false
+        use_max_num_bins: true
+    random_seed_split: 42
+    torch_data_property_names:
+    - num_rings
+    - logp
+    - num_heavy_atoms
+    validation_train_ratio: 0.2
+  shape: 100
+  train_num_tokens_freq_dict:
+    '10': 0.0001330712852638906
+    '100': 3.27560086803423e-05
+    '11': 0.00015559104123162592
+    '12': 0.00019244155099701102
+    '13': 0.0002559063178151742
+    '14': 0.00041763911067436434
+    '15': 0.0004974818818326987
+    '16': 0.0006264586660115465
+    '17': 0.0007185849404250092
+    '18': 0.0010563812799410392
+    '19': 0.0013470908569790771
+    '20': 0.0016746509437825
+    '21': 0.0021250460631372066
+    '22': 0.0026450477009376406
+    '23': 0.00301150554804897
+    '24': 0.0036666257216558164
+    '25': 0.004540801703312451
+    '26': 0.005367890922491094
+    '27': 0.006231830651435123
+    '28': 0.007562543504074029
+    '29': 0.008770421324161651
+    '3': 4.094501085042788e-06
+    '30': 0.009847275109527903
+    '31': 0.010938459648691806
+    '32': 0.012422716292019817
+    '33': 0.013597838103427098
+    '34': 0.01539532407976088
+    '35': 0.016986037751300004
+    '36': 0.01849281415059575
+    '37': 0.019686361216885724
+    '38': 0.021238177128116938
+    '39': 0.02254841747533063
+    '4': 8.189002170085576e-06
+    '40': 0.023438971461327437
+    '41': 0.024743070056913567
+    '42': 0.026210948695901404
+    '43': 0.02705441591942022
+    '44': 0.027904024894566597
+    '45': 0.02848134954755763
+    '46': 0.02974245588175081
+    '47': 0.02991033042623756
+    '48': 0.03086025467796749
+    '49': 0.031322933300577324
+    '50': 0.030549072595504236
+    '51': 0.03053678909224911
+    '52': 0.030512222085738852
+    '53': 0.029253163002088196
+    '54': 0.028561192318715966
+    '55': 0.02714449494329116
+    '56': 0.025918191868320846
+    '57': 0.024960078614420834
+    '58': 0.02372149203619539
+    '59': 0.02225361339720755
+    '6': 1.2283503255128363e-05
+    '60': 0.020398804405683167
+    '61': 0.01993203128198829
+    '62': 0.018326986856651517
+    '63': 0.016236744052737173
+    '64': 0.015661466650288662
+    '65': 0.014750440158866642
+    '66': 0.013063505711829014
+    '67': 0.012281456004585842
+    '68': 0.011446177783237112
+    '69': 0.010006960651844572
+    '7': 3.0708758137820905e-05
+    '70': 0.00906317815174221
+    '71': 0.008330262457519551
+    '72': 0.00753592924702125
+    '73': 0.006444744707857348
+    '74': 0.005803955288048152
+    '75': 0.0054395446914793436
+    '76': 0.004663636735863735
+    '77': 0.004149776849690865
+    '78': 0.0038979650329607337
+    '79': 0.0032407976088113665
+    '8': 3.27560086803423e-05
+    '80': 0.0028108749948818736
+    '81': 0.002739221225893625
+    '82': 0.0024935511607910577
+    '83': 0.002184416328870327
+    '84': 0.0021168570609671213
+    '85': 0.0019366990132252385
+    '86': 0.001590713671539123
+    '87': 0.0013348073537239487
+    '88': 0.0012856733407034353
+    '89': 0.0011014207918765098
+    '9': 7.779552061581296e-05
+    '90': 0.00092535724521967
+    '91': 0.0008639397289440282
+    '92': 0.00058756090570364
+    '93': 0.0005138598861728699
+    '94': 0.00040740285796175737
+    '95': 0.0003255128362609016
+    '96': 0.00024157556401752447
+    '97': 0.00020881955533718217
+    '98': 0.00015354379068910454
+    '99': 7.574827007329156e-05
+  train_property_sigma_dict:
+    logp: 1.6585116680617595
+    num_heavy_atoms: 7.359239934897974
+    num_rings: 1.235378277235593
+  which_dataset: qmugs
+denoising_model:
+  activation_fn:
+    name: ReLU
+    params: null
+  eps: 1e-10
+  fix_pads: true
+  hidden_dim: 20000
+  init_seed: 42
+  num_hidden: 2
+  p_dropout: 0.0
+  save_name: denoising_model.pt
+  stack_time: false
+device: cuda
+eps_ratio: 1e-9
+figs_save_dir: generated/2024-08-11/num_rings=7|n=1000|sampler.grad_approx=True/figs_saved
+fix_pads: true
+load_data: true
+logging: true
+logp_predictor_model:
+  activation_fn:
+    name: ReLU
+    params: null
+  eps: 1e-10
+  hidden_dims:
+  - 1000
+  init_seed: 43
+  p_dropout: 0.1
+  stack_time: false
+  y_guide_name: logp
+make_figs: true
+models_load_dir: generated/2024-08-11/num_rings=7|n=1000|sampler.grad_approx=True/models_saved
+models_save_dir: generated/2024-08-11/num_rings=7|n=1000|sampler.grad_approx=True/models_saved
+num_gpus: 1
+num_heavy_atoms_predictor_model:
+  activation_fn:
+    name: ReLU
+    params: null
+  eps: 1e-10
+  hidden_dims:
+  - 1000
+  init_seed: 43
+  p_dropout: 0.1
+  stack_time: false
+  y_guide_name: num_heavy_atoms
+num_rings_predictor_model:
+  activation_fn:
+    name: ReLU
+    params: null
+  eps: 1e-10
+  hidden_dims:
+  - 1000
+  init_seed: 43
+  p_dropout: 0.1
+  stack_time: false
+  type: normal
+  y_guide_name: num_rings
+num_timesteps: null
+outputs_dir: generated/2024-08-11/num_rings=7|n=1000|sampler.grad_approx=True
+sampler:
+  argmax_final: true
+  batch_size: 100
+  do_purity_sampling: false
+  dt: 0.001
+  grad_approx: true
+  guide_temp: 0.5
+  max_iterations: 100000
+  max_t: 0.98
+  noise: 30.0
+  purity_temp: 1.0
+  sample_zero_time_pads: true
+  seed: 30
+  x1_temp: 1.0
+save_figs: true
+state: generation
+trained_run_folder_dir: ./trained/CTFM
+training:
+  denoising_model:
+    clip_grad: true
+    lr: 0.0001
+    num_epochs: 100
+    optimizer: Adam
+    seed: 42
+    warmup: 0
+  logp_predictor_model:
+    clip_grad: true
+    lr: 0.0001
+    num_epochs: 50
+    optimizer: Adam
+    seed: 42
+    warmup: 0
+  num_heavy_atoms_predictor_model:
+    clip_grad: true
+    lr: 0.0001
+    num_epochs: 50
+    optimizer: Adam
+    seed: 42
+    warmup: 0
+  num_rings_predictor_model:
+    clip_grad: true
+    lr: 0.0001
+    num_epochs: 50
+    optimizer: Adam
+    seed: 42
+    warmup: 0

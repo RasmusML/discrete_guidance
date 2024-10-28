@@ -1,0 +1,3 @@
+sampler:
+  grad_approx: true
+  guide_temp: 5
