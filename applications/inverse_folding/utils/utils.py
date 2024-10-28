@@ -239,7 +239,7 @@ def loader_pdb(item,params):
     # load metadata
     if not os.path.isfile(PREFIX+".pt"):
         return {'seq': np.zeros(5)}
-    meta = torch.load(PREFIX+".pt")
+    meta = torch.load(PREFIX+".pt", weights_only=False)
     asmb_ids = meta['asmb_ids']
     asmb_chains = meta['asmb_chains']
     chids = np.array(meta['chains'])
@@ -251,7 +251,7 @@ def loader_pdb(item,params):
     # if the chains is missing is missing from all the assemblies
     # then return this chain alone
     if len(asmb_candidates)<1:
-        chain = torch.load("%s_%s.pt"%(PREFIX,chid))
+        chain = torch.load("%s_%s.pt"%(PREFIX,chid), weights_only=False)
         L = len(chain['seq'])
         return {'seq'    : chain['seq'],
                 'xyz'    : chain['xyz'],
@@ -266,7 +266,7 @@ def loader_pdb(item,params):
     idx = np.where(np.array(asmb_ids)==asmb_i)[0]
 
     # load relevant chains
-    chains = {c:torch.load("%s_%s.pt"%(PREFIX,c))
+    chains = {c:torch.load("%s_%s.pt"%(PREFIX,c), weights_only=False)
               for i in idx for c in asmb_chains[i]
               if c in meta['chains']}
 
