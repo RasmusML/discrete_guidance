@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
     model = FlowMatchPMPNN(vocab=21,
                            num_letters=21)
-    model.load_state_dict(torch.load(model_path)['model_state_dict'])
+    model.load_state_dict(torch.load(model_path, weights_only=False)['model_state_dict'])
     model.to(device)
     model.eval()
     with torch.no_grad():
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
     clean_classifier = StabilityPMPNN.init()
     fn = './pretrained_weights/stability_regression.pt'
-    clean_classifier.load_state_dict(torch.load(fn))
+    clean_classifier.load_state_dict(torch.load(fn, weights_only=False))
     clean_classifier.to(device)
     with torch.no_grad():
         h_V_cl, h_E_cl, E_idx_cl, mask_attend_cl = clean_classifier.encode_structure(
@@ -100,7 +100,7 @@ if __name__ == "__main__":
         fn = f'./pretrained_weights/noisy_classifier_digress_{args.cluster}_30.pt'
     else:
         fn = f'./pretrained_weights/noisy_classifier_{args.cluster}_30.pt'
-    noisy_classifier.load_state_dict(torch.load(fn))
+    noisy_classifier.load_state_dict(torch.load(fn, weights_only=False))
 
     if use_tag:
         # need one-hot-encoded input to take gradients
@@ -155,7 +155,7 @@ if __name__ == "__main__":
 
     noisy_classifier = StabilityPMPNN.init()
     fn = './pretrained_weights/stability_regression.pt'
-    noisy_classifier.load_state_dict(torch.load(fn))
+    noisy_classifier.load_state_dict(torch.load(fn, weights_only=False))
     noisy_classifier.to(device)
 
 

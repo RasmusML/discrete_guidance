@@ -37,7 +37,7 @@ if __name__ == '__main__':
     rocklin_df = process_rocklin_data()
     noisy_classifier = StabilityPMPNN.init()
     fn = args.input_path
-    noisy_classifier.load_state_dict(torch.load(fn))
+    noisy_classifier.load_state_dict(torch.load(fn, weights_only=False))
     noisy_classifier.to(device)
 
     train_lr = 1e-4

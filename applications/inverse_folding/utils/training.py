@@ -88,7 +88,7 @@ def main(args):
     model.to(device)
 
     if PATH:
-        checkpoint = torch.load(PATH)
+        checkpoint = torch.load(PATH, weights_only=False)
         total_step = checkpoint['step']  #write total_step from the checkpoint
         epoch = checkpoint['epoch']  #write epoch from the checkpoint
         model.load_state_dict(checkpoint['model_state_dict'])

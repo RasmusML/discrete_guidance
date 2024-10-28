@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     model = FlowMatchPMPNN(vocab=21,
                            num_letters=21)
-    model.load_state_dict(torch.load(model_path)['model_state_dict'])
+    model.load_state_dict(torch.load(model_path, weights_only=False)['model_state_dict'])
     model.to(device)
     model.eval()
     with torch.no_grad():

@@ -53,7 +53,7 @@ def parse_args():
 args = parse_args()
 device = 'cuda'
 rocklin_df = process_rocklin_data()
-name_to_graph = torch.load(ROCKLIN_DIR / 'name_to_graph.pt')
+name_to_graph = torch.load(ROCKLIN_DIR / 'name_to_graph.pt', weights_only=False)
 
 # Save loaders once since they take a long time to compute
 if True:

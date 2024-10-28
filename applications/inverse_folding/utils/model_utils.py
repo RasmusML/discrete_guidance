@@ -778,7 +778,7 @@ class StabilityPMPNN(nn.Module):
         self.lin2 = nn.Linear(128, 1)
 
     def load_fm_mpnn_weights(self, path):
-        self.fm_mpnn.load_state_dict(torch.load(path)['model_state_dict'])
+        self.fm_mpnn.load_state_dict(torch.load(path, weights_only=False)['model_state_dict'])
 
     def encode_structure(self, X, mask, chain_M, residue_idx, chain_encoding_all):
         h_V, h_E, E_idx, mask_attend = self.fm_mpnn.encode_structure(X, mask, chain_M, residue_idx, chain_encoding_all)
