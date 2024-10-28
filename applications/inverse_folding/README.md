@@ -13,14 +13,14 @@ Pretrained weights are available in `./pretrained_weights/fmif_weights.pt`
 
 # Setup Stability Data
 From https://zenodo.org/records/7992926 download `AlphaFold_model_PDBs.zip` and place the unzipped directory inside `./utils/rocklin_data`
-Run `process_name_to_graph.py` to pre-process the PDB files into the proper format for ProteinMPNN/FMIF. This should produce the file `name_to_graph.pt` in the directory
+Run `cd utils/rocklin_data; process_name_to_graph.py; cd ../../` to pre-process the PDB files into the proper format for ProteinMPNN/FMIF. This should produce the file `name_to_graph.pt` in the directory
 
 From https://zenodo.org/records/7992926 download `Processed_K50_dG_datasets.zip` and place the file `Tsuboyama2023_Dataset2_Dataset3_20230416.csv` inside `./utils/rocklin_data`
 
 
 # Train the clean (unnoised) stability regression model
 
-`python utils/train_full_stability_model.py --model_path ./pretrained_weights/fmif_weights.pt`
+`python utils/train_full_stability_model.py --init_model_path ./pretrained_weights/fmif_weights.pt`
 
 # Train the noisy DDG>0 classifiers
 This is a two step process. First we train an initial noisy classifier using just labeled data:
