@@ -19,20 +19,22 @@ From https://zenodo.org/records/7992926 download `Processed_K50_dG_datasets.zip`
 
 
 # Train the clean (unnoised) stability regression model
-
+To train the clean (unnoised) stability regression model run:
 `python utils/train_full_stability_model.py --init_model_path ./pretrained_weights/fmif_weights.pt`
+
+The pre-trained weights are in `./pretrained_weights/stability_regression.pt`
 
 # Train the noisy DDG>0 classifiers
 This is a two step process. First we train an initial noisy classifier using just labeled data:
 
 For example, to train a classifier for the protein in Rocklin cluster 7:
-`python train_noisy_classifier.py --cluster 7` 
+`python utils/train_noisy_classifier.py --cluster 7` 
 Move the results file, `noisy_classifier_7_30.pt` to `./pretrained_weights`
 
-Then we sample more sequences with FMIF and label them with the regression model
-`python train_noisy_classifier_iterative.py --cluster 7` 
+Then we sample more sequences with FMIF and label them with the regression model and re-train the noisy classifier
+`python utils/train_noisy_classifier_iterative.py --cluster 7` 
 
-The file, `noisy_classifier_7_iter_1.pt` is our final noisy classifier. Place this in `./pretrained_ewights`
+The file, `noisy_classifier_7_iter_1.pt` is our final noisy classifier. Place this in `./pretrained_weights`
 
 # Run Guidance
 To perform guidance using guide temperatures of 1.0, 0.1, 0.01 (guidance strengths of 1.0, 10, 100) for this cluster we run:
