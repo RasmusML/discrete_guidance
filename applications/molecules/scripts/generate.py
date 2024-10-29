@@ -162,8 +162,7 @@ if __name__=='__main__':
                                                 predictor_y_dict={predictor_model_name: target_property_value},
                                                 guide_temp=generation_cfg.sampler.guide_temp,
                                                 grad_approx=generation_cfg.sampler.grad_approx,
-                                                batch_size=generation_cfg.sampler.batch_size,
-                                                logger=logger)
+                                                batch_size=generation_cfg.sampler.batch_size)
 
 
         # Analyze the generated x
