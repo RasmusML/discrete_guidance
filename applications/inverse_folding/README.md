@@ -49,3 +49,5 @@ To perform TAG guidance using guide temperatures of 1.0, 0.1, 0.01 (guidance str
 `python utils/generate_sequences.py --use_tag --guide_temp 0.1 --batch_size 1 --x1_temp 0.1 --cluster '7'  --predictor_weights './pretrained_weights/noisy_classifier_7_iter_1.pt' --dt 0.01`
 `python utils/generate_sequences.py --use_tag --guide_temp 0.01 --batch_size 1 --x1_temp 0.1 --cluster '7'  --predictor_weights './pretrained_weights/noisy_classifier_7_iter_1.pt' --dt 0.01`
 
+# Folding Sequences
+Sequences were folded using colabfold. First install [localcolabfold](https://github.com/YoshitakaMo/localcolabfold) and then fold sequences using `colabfold_batch --use-gpu-relax --msa-mode single_sequence --amber my_fasta.fa output_dir`.
