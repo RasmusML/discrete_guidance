@@ -19,6 +19,9 @@ conda install -y tensorboard ml-collections scikit-learn torchmetrics
 # Install cheminformatics pipeline
 conda install -y rdkit chembl_structure_pipeline
 
+# Install biopython for inverse folding
+conda install -y biopython -c conda-forge
+
 # Metrics for cifar10 evaluation
 pip install pytorch-gan-metrics
 
