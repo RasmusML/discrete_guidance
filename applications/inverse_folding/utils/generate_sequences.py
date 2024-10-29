@@ -22,7 +22,7 @@ def parse_args():
     parser.add_argument('--num_samples', type=int, default=100)
     parser.add_argument('--batch_size', type=int, default=1)
     parser.add_argument('--cluster', type=str, default='146')
-    parser.add_argument('--fm_weights', type=Path, default='./pretrained_weights/epoch_last.pt')
+    parser.add_argument('--fm_weights', type=Path, default='./pretrained_weights/fmif_weights.pt')
     parser.add_argument('--predictor_weights', type=Path, required=True)
     parser.add_argument('--use_tag', action='store_true')
     parser.add_argument('--do_purity_sampling', action='store_true')
