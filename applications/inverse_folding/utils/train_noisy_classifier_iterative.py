@@ -3,10 +3,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 from applications.inverse_folding.utils.model_utils import FlowMatchPMPNN, StabilityPMPNN
 from applications.inverse_folding.utils.data import aa_to_i, i_to_aa, seq_to_one_hot, RocklinDataset, process_rocklin_data, generate_train_val_split, rocklin_df_to_dataset, ROCKLIN_DIR, ProteinGymDataset
-from training.model_utils import featurize, loss_smoothed, loss_nll, get_std_opt, ProteinMPNN
+from applications.inverse_folding.utils.model_utils import featurize, loss_smoothed, loss_nll, get_std_opt, ProteinMPNN
 import pandas as pd
 import numpy as np
-from training.utils import worker_init_fn, get_pdbs, loader_pdb, build_training_clusters, PDB_dataset, StructureDataset, StructureLoader
+from applications.inverse_folding.utils.utils import worker_init_fn, get_pdbs, loader_pdb, build_training_clusters, PDB_dataset, StructureDataset, StructureLoader
 from tqdm import tqdm
 from pathlib import Path
 from torch.optim import Adam, AdamW
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     seqs_exp = list(single_df.aa_seq.values)
     seqs_exp_enc = torch.tensor([[aa_to_i[aa] for aa in s] for s in seqs_exp])
     with torch.no_grad():
-        ytrue_exp = (clean_log_prob(torch.tensor(seqs_exp_enc).long().cuda(), None) - clean_log_prob(S1[0].repeat(len(seqs_exp_enc), 1).cuda(), None))
+        ytrue_exp = (clean_log_prob(seqs_exp_enc.clone().detach().long().cuda(), None) - clean_log_prob(S1[0].repeat(len(seqs_exp_enc), 1).cuda(), None))
         labels_exp = (ytrue_exp >= 0).int().reshape(-1).cpu().numpy()
 
     with torch.no_grad():
