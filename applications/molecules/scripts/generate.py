@@ -144,8 +144,7 @@ if __name__=='__main__':
                                                 seed=None, # Only use the external seed
                                                 stochasticity=generation_cfg.sampler.noise,
                                                 dt=generation_cfg.sampler.dt,
-                                                batch_size=generation_cfg.sampler.batch_size,
-                                                logger=logger)
+                                                batch_size=generation_cfg.sampler.batch_size)
         else:
             # Construct the predictor model name based on the property name
             predictor_model_name = f"{property_name}_predictor_model"
