@@ -19,4 +19,4 @@ Code release for "Unlocking Guidance for Discrete State-Space Diffusion and Flow
 
 * The stochasticity parameter used in flow matching can play a large role in sample quality. We recommend trying out different settings of this parameter such as 0, 1, 10, and 100. 
 
-* Just as in continuous state-space diffusoin models, the quality of the noisy classifiers substantially impacts the ability of guidance to achieve the desired goal. Care should be taken to ensure that the noisy classifiers are well-trained for your specific task.
+* Just as in continuous state-space diffusion models, the quality of the noisy classifiers substantially impacts the ability of guidance to achieve the desired goal. Care should be taken to ensure that the noisy classifiers are well-trained for your specific task.
