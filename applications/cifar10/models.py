@@ -11,6 +11,7 @@ from applications.cifar10 import networks
 from applications.cifar10 import model_utils
 from applications.cifar10.forward_processes import GaussianTargetRateForwardProcess
 
+
 def count_params(model):
     return sum([p.numel() for p in model.parameters()])
 
@@ -19,7 +20,7 @@ class ImageX0PredBase(nn.Module):
     def __init__(self, cfg, device=None, rank=None):
         """
         Args:
-            device: Allows the option to load a trained model on a different device 
+            device: Allows the option to load a trained model on a different device
                 than that used for training
         """
         super().__init__()
@@ -49,10 +50,19 @@ class ImageX0PredBase(nn.Module):
         time_embed_dim = cfg.model.time_embed_dim
 
         tmp_net = networks.UNet(
-                ch, num_res_blocks, num_scales, ch_mult, input_channels,
-                output_channels, scale_count_to_put_attn, data_min_max,
-                dropout, skip_rescale, do_time_embed, time_scale_factor,
-                time_embed_dim
+            ch,
+            num_res_blocks,
+            num_scales,
+            ch_mult,
+            input_channels,
+            output_channels,
+            scale_count_to_put_attn,
+            data_min_max,
+            dropout,
+            skip_rescale,
+            do_time_embed,
+            time_scale_factor,
+            time_embed_dim,
         ).to(self.device)
         if cfg.distributed:
             self.net = DDP(tmp_net, device_ids=[rank])
@@ -61,36 +71,40 @@ class ImageX0PredBase(nn.Module):
 
     def forward(self, x, times):
         """
-            Returns logits over state space for each pixel 
+        Returns logits over state space for each pixel
         """
-        x = x['x']
+        x = x["x"]
         B, D = x.shape
         C, H, W = self.data_shape
         S = self.S
         x = x.view(B, C, H, W)
 
-        net_out = self.net(x, times) # (B, 2*C, H, W)
+        net_out = self.net(x, times)  # (B, 2*C, H, W)
 
         # Truncated logistic output from https://arxiv.org/pdf/2107.03006.pdf
 
         mu = net_out[:, 0:C, :, :].unsqueeze(-1)
         log_scale = net_out[:, C:, :, :].unsqueeze(-1)
 
-        inv_scale = torch.exp(- (log_scale - 2))
+        inv_scale = torch.exp(-(log_scale - 2))
 
-        bin_width = 2. / self.S
-        bin_centers = torch.linspace(start=-1. + bin_width/2,
-            end=1. - bin_width/2,
+        bin_width = 2.0 / self.S
+        bin_centers = torch.linspace(
+            start=-1.0 + bin_width / 2,
+            end=1.0 - bin_width / 2,
             steps=self.S,
-            device=self.device).view(1, 1, 1, 1, self.S)
+            device=self.device,
+        ).view(1, 1, 1, 1, self.S)
 
-        sig_in_left = (bin_centers - bin_width/2 - mu) * inv_scale
+        sig_in_left = (bin_centers - bin_width / 2 - mu) * inv_scale
         bin_left_logcdf = F.logsigmoid(sig_in_left)
-        sig_in_right = (bin_centers + bin_width/2 - mu) * inv_scale
+        sig_in_right = (bin_centers + bin_width / 2 - mu) * inv_scale
         bin_right_logcdf = F.logsigmoid(sig_in_right)
 
         logits_1 = self._log_minus_exp(bin_right_logcdf, bin_left_logcdf)
-        logits_2 = self._log_minus_exp(-sig_in_left + bin_left_logcdf, -sig_in_right + bin_right_logcdf)
+        logits_2 = self._log_minus_exp(
+            -sig_in_left + bin_left_logcdf, -sig_in_right + bin_right_logcdf
+        )
         if self.fix_logistic:
             logits = torch.min(logits_1, logits_2)
         else:
@@ -101,26 +115,27 @@ class ImageX0PredBase(nn.Module):
         return logits
 
     def _log_minus_exp(self, a, b, eps=1e-6):
-        """ 
-            Compute log (exp(a) - exp(b)) for (b<a)
-            From https://arxiv.org/pdf/2107.03006.pdf
         """
-        return a + torch.log1p(-torch.exp(b-a) + eps)
+        Compute log (exp(a) - exp(b)) for (b<a)
+        From https://arxiv.org/pdf/2107.03006.pdf
+        """
+        return a + torch.log1p(-torch.exp(b - a) + eps)
 
 
 # Based on https://github.com/yang-song/score_sde_pytorch/blob/ef5cb679a4897a40d20e94d8d0e2124c3a48fb8c/models/ema.py
-class EMA():
+class EMA:
     def __init__(self, cfg):
         self.decay = cfg.model.ema_decay
         if self.decay < 0.0 or self.decay > 1.0:
-            raise ValueError('Decay must be between 0 and 1')
+            raise ValueError("Decay must be between 0 and 1")
         self.shadow_params = []
         self.collected_params = []
         self.num_updates = 0
 
     def init_ema(self):
-        self.shadow_params = [p.clone().detach()
-                            for p in self.parameters() if p.requires_grad]
+        self.shadow_params = [
+            p.clone().detach() for p in self.parameters() if p.requires_grad
+        ]
 
     def update_ema(self):
 
@@ -138,9 +153,9 @@ class EMA():
 
     def state_dict(self):
         sd = nn.Module.state_dict(self)
-        sd['ema_decay'] = self.decay
-        sd['ema_num_updates'] = self.num_updates
-        sd['ema_shadow_params'] = self.shadow_params
+        sd["ema_decay"] = self.decay
+        sd["ema_num_updates"] = self.num_updates
+        sd["ema_shadow_params"] = self.shadow_params
 
         return sd
 
@@ -158,7 +173,9 @@ class EMA():
             param.data.copy_(c_param.data)
 
     def load_state_dict(self, state_dict):
-        missing_keys, unexpected_keys = nn.Module.load_state_dict(self, state_dict, strict=False)
+        missing_keys, unexpected_keys = nn.Module.load_state_dict(
+            self, state_dict, strict=False
+        )
 
         # print("state dict keys")
         # for key in state_dict.keys():
@@ -167,20 +184,24 @@ class EMA():
         if len(missing_keys) > 0:
             print("Missing keys: ", missing_keys)
             raise ValueError
-        if not (len(unexpected_keys) == 3 and \
-            'ema_decay' in unexpected_keys and \
-            'ema_num_updates' in unexpected_keys and \
-            'ema_shadow_params' in unexpected_keys):
+        if not (
+            len(unexpected_keys) == 3
+            and "ema_decay" in unexpected_keys
+            and "ema_num_updates" in unexpected_keys
+            and "ema_shadow_params" in unexpected_keys
+        ):
             print("Unexpected keys: ", unexpected_keys)
             raise ValueError
 
-        self.decay = state_dict['ema_decay']
-        self.num_updates = state_dict['ema_num_updates']
-        self.shadow_params = state_dict['ema_shadow_params']
+        self.decay = state_dict["ema_decay"]
+        self.num_updates = state_dict["ema_num_updates"]
+        self.shadow_params = state_dict["ema_shadow_params"]
 
     def train(self, mode=True):
         if self.training == mode:
-            print("Dont call model.train() with the same mode twice! Otherwise EMA parameters may overwrite original parameters")
+            print(
+                "Dont call model.train() with the same mode twice! Otherwise EMA parameters may overwrite original parameters"
+            )
             print("Current model training mode: ", self.training)
             print("Requested training mode: ", mode)
             raise ValueError
@@ -199,7 +220,9 @@ class EMA():
 # This class is used for initializing the model ckpt trained by campbell
 # make sure EMA inherited first so it can override the state dict functions
 @model_utils.register_model
-class GaussianTargetRateImageX0PredEMA(EMA, ImageX0PredBase, GaussianTargetRateForwardProcess):
+class GaussianTargetRateImageX0PredEMA(
+    EMA, ImageX0PredBase, GaussianTargetRateForwardProcess
+):
     def __init__(self, cfg, device, rank=None):
         EMA.__init__(self, cfg)
         ImageX0PredBase.__init__(self, cfg, device, rank)

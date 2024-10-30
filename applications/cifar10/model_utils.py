@@ -4,10 +4,11 @@ Code from https://github.com/andrew-cr/tauLDR/blob/main/lib/models/model_utils.p
 
 _MODELS = {}
 
+
 def register_model(cls):
     name = cls.__name__
     if name in _MODELS:
-        raise ValueError(f'{name} is already registered!')
+        raise ValueError(f"{name} is already registered!")
     _MODELS[name] = cls
     return cls
 

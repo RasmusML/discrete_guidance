@@ -2,10 +2,7 @@
 For the enhancer experiment, we built on top of the codebase from the [Dirichlet Flow Matching (DirFM) codebase](https://github.com/HannesStark/dirichlet-flow-matching). All relevant files of the enhancer example can be found in `applications/enhancer`.
 
 ## Configurations
-To use the pretrained models, download the `enhancer.tar.gz` file from zenodo and place
-the unpacked `model_weights` folder in this directory or a given specified directory, which
-we will refer to as `$parent_dir` (e.g. `parent_dir=discrete_guidance/applications/enhancer/`).
-The paths will be defined relative to `$parent_dir`.
+To use the pretrained models, download the `enhancer.tar.gz` file from zenodo and place the unpacked `model_weights` folder in this directory or a given directory you specified, which we will refer to as `$parent_dir` (e.g. `parent_dir=discrete_guidance/applications/enhancer/`). The paths for this application will be defined relative to `$parent_dir`.
 
 You would also need to download the dataset and oracle classifier checkpoint from the DirFM codebase
 to compute the evaluation metrics e.g. FBD and target class probability. 

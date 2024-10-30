@@ -176,7 +176,6 @@ def get_cifar10_noisy_classifier_train_config(parent_dir):
 
 def get_cifar10_test_config(
     parent_dir,
-    pretrained_denoising_model_dirname=None,
     save_samples_dir=None,
     sampler_name="tau_leaping",
 ):
@@ -185,9 +184,6 @@ def get_cifar10_test_config(
 
     Args:
         parent_dir (str): Path to the parent directory for the cifar10 experiment
-        pretrained_denoising_model_dirname (str): The name of the directory
-            where the pretrained denoising model is saved
-            Assumes this is directly under `parent_dir`
         save_samples_dir (str): If not None, the directory where image samples
             will be saved
     """
@@ -201,23 +197,25 @@ def get_cifar10_test_config(
     if save_samples_dir:
         config.save_samples_dir = save_samples_dir
 
-    if pretrained_denoising_model_dirname:
-        # Denoising model locations
-        denoising_model_location = os.path.join(
-            parent_dir,
-            pretrained_denoising_model_dirname,
-            "checkpoints/ckpt_0001999999.pt",
-        )
-        denoising_model_config_location = os.path.join(
-            parent_dir, pretrained_denoising_model_dirname, "config/config_001.yaml"
-        )
-        config.denoising_model_train_config_path = denoising_model_config_location
-        config.denoising_model_checkpoint_path = denoising_model_location
+    model_weights_dir = os.path.join(parent_dir, "model_weights")
+
+    # Denoising model locations
+    denoising_model_location = os.path.join(
+        model_weights_dir, "denoising_model", "model_ckpt.pt"
+    )
+    denoising_model_config_location = os.path.join(
+        model_weights_dir, "denoising_model", "config.yaml"
+    )
+    config.denoising_model_train_config_path = denoising_model_config_location
+    config.denoising_model_checkpoint_path = denoising_model_location
 
     # Predictive model locations
-    model_weights_dir = os.path.join(parent_dir, "model_weights")
-    property_model_location = os.path.join(model_weights_dir, "model_ckpt.pt")
-    property_model_config_location = os.path.join(model_weights_dir, "config.yaml")
+    property_model_location = os.path.join(
+        model_weights_dir, "noisy_classifier", "model_ckpt.pt"
+    )
+    property_model_config_location = os.path.join(
+        model_weights_dir, "noisy_classifier", "config.yaml"
+    )
     config.property_model_train_config_path = property_model_config_location
     config.property_model_checkpoint_path = property_model_location
 
