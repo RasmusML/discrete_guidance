@@ -20,29 +20,26 @@ from applications.enhancer.models import CNNModel
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "parent_dir",
+        "--parent_dir",
         type=str,
-        default="/data/gdd/outputs/",
+        default="discrete_guidance/applications/enhancer/",
         help="Path to the parent directory where model checkpoints and outputs are saved",
     )
     parser.add_argument(
-        "sampler_name",
+        "--sampler_name",
         type=str,
-        nargs="?",
         default="euler",
         help="Which sampler to use",
     )
     parser.add_argument(
-        "num_samples",
+        "--num_samples",
         type=int,
-        nargs="?",
         default=1000,
         help="Number of samples to draw for each class",
     )
     parser.add_argument(
-        "dt",
+        "--dt",
         type=float,
-        nargs="?",
         default=0.01,
         help="Time interval for Euler sampling",
     )
@@ -51,6 +48,7 @@ def main():
         help="If true, label the generated samples with a clean classifier",
         action="store_true",
     )
+
     args = parser.parse_args()
     parent_dir = args.parent_dir
     sampler_name = args.sampler_name

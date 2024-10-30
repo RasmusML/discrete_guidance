@@ -2,14 +2,17 @@
 For the enhancer experiment, we built on top of the codebase from the [Dirichlet Flow Matching (DirFM) codebase](https://github.com/HannesStark/dirichlet-flow-matching). All relevant files of the enhancer example can be found in `applications/enhancer`.
 
 ## Configurations
-The pretrained models are provided under the folder `model_weights` in `enhancer.tar.gz` in the zenodo link. 
-First, specify a directory `$parent_dir` (e.g. `parent_dir=discrete_guidance/applications/enhancer/`) 
-and place the folder `model_weights` under it.
+To use the pretrained models, download the `enhancer.tar.gz` file from zenodo and place
+the unpacked `model_weights` folder in this directory or a given specified directory, which
+we will refer to as `$parent_dir` (e.g. `parent_dir=discrete_guidance/applications/enhancer/`).
+The paths will be defined relative to `$parent_dir`.
 
 You would also need to download the dataset and oracle classifier checkpoint from the DirFM codebase
 to compute the evaluation metrics e.g. FBD and target class probability. 
-Place the two directories named `work_dir` and `the_code` under `$parent_dir`.
+After downloading and extracting the files, place the two directories named `work_dir` and `the_code` under `$parent_dir`.
+
 The file `configs.py` contains the hyperparameters used for training, as well as hyperparameters and path to model checkpoints used for sampling.
+Training and sampling setup can be adjusted by modifying this file (see details below).
 
 ## Sampling
 The script used for sampling with guidance is `scripts/sample_cond.py`. 
@@ -43,16 +46,14 @@ The command to train a conditional model (used for predictor-free guidance) is:
 ```
 For training the noisy classifier, we found it helpful to train the noisy classifier 
 on a distillation dataset obtained by sampling sequences from the unconditional model 
-and labeled them with the clean classifier.
-The distillation dataset we used is saved in `data/samples_uncond-labeled-oracle.npz` under
-`model_weights/`.
+and labeled them with the clean classifier. 
+This training set can be created by sampling from a trained unconditional model 
+and labeling it with the clean classifier with the following command (which will create 1e6 samples):
+```
+    python scripts/sample_uncond.py --parent_dir $parent_dir --num_samples 1000000 --dt 0.01 --label
+```
 The command to train the noisy classifier is (`distill_data_path` is optional. If it is not provided,
 then we train the noisy classifier on the same training set of the denoising model):
 ```
-    python scripts/train_fm.py --parent_dir $parent_dir --which_model cls_noisy --distill_data_path [distill_data_path]
-```
-You can also create your own training set by sampling from a trained unconditional model 
-and labeling it with the clean classifier with the following command (which will create 10000 samples):
-```
-    python scripts/sample_uncond.py --parent_dir $parent_dir --num_samples 10000 --dt 0.01 --label
+    python scripts/train_fm.py --parent_dir $parent_dir --which_model cls_noisy --distill_data_path $distill_data_path
 ```

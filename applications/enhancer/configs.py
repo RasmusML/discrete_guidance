@@ -114,17 +114,17 @@ def get_enhancer_config(
         config.training = training = ml_collections.ConfigDict()
         if which_model == "denoising":
             training.batch_size = 256
-            training.n_iters = 300000  # 1 epoch is 328 steps with batch size=256
+            training.n_iters = 300000
             training.warmup = 500
             training.lr = 5e-4
         elif which_model == "cls_noisy":
             training.batch_size = 256
-            training.n_iters = 300000  # 300000
+            training.n_iters = 300000
             training.warmup = 0
             training.lr = 1e-3
         elif which_model == "cls_clean":
             training.batch_size = 128
-            training.n_iters = 10480  # 300000
+            training.n_iters = 10480
             training.warmup = 0
             training.lr = 1e-3
         training.clip_grad = True
