@@ -15,7 +15,7 @@ Code release for "Unlocking Guidance for Discrete State-Space Diffusion and Flow
 * Run `conda activate $ENV_NAME; ./install.sh $ENV_NAME`
 
 ### Key Hyperparameter Considerations
-* The number of timesteps is controlled by the parameter, `dt`. We recommend using a `dt` such that `1/dt` is at least as big as the number of dimensions as your system (e.g. `dt < 0.01` for a protein of length 100). In general, smaller values of `dt` should result in better performance at the cost of taking a longer time to run. 
+* The number of timesteps is controlled by the parameter, `dt`. We recommend using a `dt` such that `1/dt` is at least as big as the number of dimensions as your system (e.g. `dt <= 0.01` for a protein of length 100). In general, smaller values of `dt` should result in better performance at the cost of taking a longer time to run. 
 
 * The stochasticity parameter used in flow matching can play a large role in sample quality. We recommend trying out different settings of this parameter such as 0, 1, 10, and 100. 
 
