@@ -26,7 +26,7 @@ def main():
     parser.add_argument(
         "--parent_dir",
         type=str,
-        default="/data/gdd/enhancer/",
+        default="discrete_guidance/applications/enhancer/",
         help="Path to the parent directory where model checkpoints and outputs are saved",
     )
     parser.add_argument(

@@ -31,12 +31,14 @@ def get_enhancer_config(
         assert not train_fbd
         assert not cls_free_guidance
 
-    # The directory for saving the run directories
-    # for both training and sampling
-    save_dir = os.path.join(parent_dir, "outputs/")
-
     # General config
     config = ml_collections.ConfigDict()
+
+    # The directory for saving the run directories
+    # for both training and sampling
+    config.parent_dir = parent_dir
+    save_dir = os.path.join(parent_dir, "outputs/")
+
     config.discrete_time = discrete_time
     # Number of timesteps is only relevant for discrete time models
     config.num_timesteps = num_timesteps
@@ -151,6 +153,8 @@ def get_enhancer_config(
     else:
         # Evaluation / sampling specific configs
         config.eval_name = "enhancer"
+        # The directory where pretrained model weights are stored
+        model_weights_dir = os.path.join(parent_dir, "model_weights")
 
         # The pretrained clean classifier used for evaluation, provided by Dirichlet FM
         # This we never change
@@ -163,11 +167,9 @@ def get_enhancer_config(
             "workdir/clsDNAclean_cnn_1stack_2023-12-30_15-01-30/epoch=15-step=10480.ckpt",
         )
 
-        # The directory where pretrained model weights are stored
-        model_weights_dir = os.path.join(parent_dir, 'model_weights')
         if cls_free_guidance:
             config.denoising_model_checkpoint_path = os.path.join(
-                model_weights_dir, 'pfg/model_ckpt.pt'
+                model_weights_dir, "pfg/model_ckpt.pt"
             )
             config.denoising_model_train_config_path = os.path.join(
                 model_weights_dir, "pfg/config.yaml"
@@ -177,7 +179,7 @@ def get_enhancer_config(
             if discrete_time:
                 ## D3PM models
                 config.denoising_model_checkpoint_path = os.path.join(
-                    model_weights_dir, 'digress/denoising_model_ckpt.pt'
+                    model_weights_dir, "digress/denoising_model_ckpt.pt"
                 )
                 config.denoising_model_train_config_path = os.path.join(
                     model_weights_dir, "digress/denoising_model_config.yaml"
@@ -193,7 +195,7 @@ def get_enhancer_config(
                 ### Flow matching models
                 ## Denoising model
                 config.denoising_model_checkpoint_path = os.path.join(
-                    model_weights_dir, 'pg/denoising_model_ckpt.pt'
+                    model_weights_dir, "pg/denoising_model_ckpt.pt"
                 )
                 config.denoising_model_train_config_path = os.path.join(
                     model_weights_dir, "pg/denoising_model_config.yaml"
@@ -209,7 +211,7 @@ def get_enhancer_config(
             ## Guidance temperature
             config.guide_temps = [1.0, 0.5, 0.2, 0.1, 0.05]
 
-        config.target_classes = [2, 68, 16, 5, 4, 33, 9, 12]
+        config.target_classes = [16, 5, 4, 2, 33, 68, 9, 12]
         config.sampler = sampler = ml_collections.ConfigDict()
         sampler.name = sampler_name
         sampler.batch_size = 500
