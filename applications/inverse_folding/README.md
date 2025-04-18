@@ -1,5 +1,5 @@
 # Pre-trained weights
-To use our pre-trained weights, download the `inverse_folding.tar.gz` file from zenodo and place the unpacked `pretrained_weights folder in this directory
+To use our pre-trained weights, download the `inverse_folding.tar.gz` file from zenodo and place the unpacked `pretrained_weights` folder in this directory
 
 # Training Flow-Matching Inverse Folding Model (FMIF)
 To train the flow-matching inverse folding  model, first, download the data used to train [ProteinMPNN](https://github.com/dauparas/ProteinMPNN/tree/main). The files can be downloaded from [here](https://github.com/dauparas/ProteinMPNN/tree/main)
@@ -55,3 +55,10 @@ To perform TAG guidance using guide temperatures of 1.0, 0.1, 0.01 (guidance str
 
 # Folding Sequences
 Sequences were folded using colabfold. First install [localcolabfold](https://github.com/YoshitakaMo/localcolabfold) and then fold sequences using `colabfold_batch --use-gpu-relax --msa-mode single_sequence --amber my_fasta.fa output_dir`.
+
+# Evaluating Success
+Finally, to evalute the stability and RMSD of the sequences you can run:
+`python utils/evaluate_success.py --cluster 7 --input_fasta my_generated_sequences.fa --input_colabfold my_colabfold_output_directory --output_csv my_output_csv_file.csv`
+
+Note that, we use [[biotite][https://www.biotite-python.org/latest/]] to compute the RMSD, so you may need to install this dependency.
+
