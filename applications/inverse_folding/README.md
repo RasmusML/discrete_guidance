@@ -40,13 +40,17 @@ The file, `noisy_classifier_7_iter_1.pt` is our final noisy classifier. Place th
 To perform guidance using guide temperatures of 1.0, 0.1, 0.01 (guidance strengths of 1.0, 10, 100) for this cluster we run:
 
 `python utils/generate_sequences.py --guide_temp 1.0 --batch_size 1 --x1_temp 0.1 --cluster '7'  --predictor_weights './pretrained_weights/noisy_classifier_7_iter_1.pt' --dt 0.01`
+
 `python utils/generate_sequences.py --guide_temp 0.1 --batch_size 1 --x1_temp 0.1 --cluster '7'  --predictor_weights './pretrained_weights/noisy_classifier_7_iter_1.pt' --dt 0.01`
+
 `python utils/generate_sequences.py --guide_temp 0.01 --batch_size 1 --x1_temp 0.1 --cluster '7'  --predictor_weights './pretrained_weights/noisy_classifier_7_iter_1.pt' --dt 0.01`
 
 To perform TAG guidance using guide temperatures of 1.0, 0.1, 0.01 (guidance strengths of 1.0, 10, 100) for this cluster we run:
 
 `python utils/generate_sequences.py --use_tag --guide_temp 1.0 --batch_size 1 --x1_temp 0.1 --cluster '7'  --predictor_weights './pretrained_weights/noisy_classifier_7_iter_1.pt' --dt 0.01`
+
 `python utils/generate_sequences.py --use_tag --guide_temp 0.1 --batch_size 1 --x1_temp 0.1 --cluster '7'  --predictor_weights './pretrained_weights/noisy_classifier_7_iter_1.pt' --dt 0.01`
+
 `python utils/generate_sequences.py --use_tag --guide_temp 0.01 --batch_size 1 --x1_temp 0.1 --cluster '7'  --predictor_weights './pretrained_weights/noisy_classifier_7_iter_1.pt' --dt 0.01`
 
 # Folding Sequences
