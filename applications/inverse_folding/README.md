@@ -60,5 +60,5 @@ Sequences were folded using colabfold. First install [localcolabfold](https://gi
 Finally, to evalute the stability and RMSD of the sequences you can run:
 `python utils/evaluate_success.py --cluster 7 --input_fasta my_generated_sequences.fa --input_colabfold my_colabfold_output_directory --output_csv my_output_csv_file.csv`
 
-Note that, we use [[biotite][https://www.biotite-python.org/latest/]] to compute the RMSD, so you may need to install this dependency.
+Note that, we use [biotite](https://www.biotite-python.org/latest/) to compute the RMSD, so you may need to install this dependency.
 
