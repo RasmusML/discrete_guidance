@@ -2,7 +2,6 @@
 *.err
 *.out
 *.*~
-setup.py
 *.pyc
 *.cpython
 *-checkpoint.py
