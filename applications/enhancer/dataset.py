@@ -6,14 +6,14 @@ import os
 
 
 class EnhancerDataset(torch.utils.data.Dataset):
-    def __init__(self, cfg, split):
+    def __init__(self, cfg, split, n_seqs=10):
         self.device = cfg.device
 
         all_data = pickle.load(
             open(
                 os.path.join(
                     cfg.parent_dir,
-                    f'the_code/General/data/Deep{"MEL2" if cfg.data.mel_enhancer else "FlyBrain"}_data.pkl',
+                    'flybrain_data.pkl',
                 ),
                 "rb",
             )
@@ -26,8 +26,8 @@ class EnhancerDataset(torch.utils.data.Dataset):
         )
 
         self.num_cls = all_data[f"y_{split}"].shape[-1]
-        self.x = seqs
-        self.y = clss
+        self.x = seqs if n_seqs == -1 else seqs[:n_seqs]
+        self.y = clss if n_seqs == -1 else clss[:n_seqs]
 
     def __len__(self):
         return len(self.x)

@@ -20,7 +20,7 @@ def main():
     parser.add_argument(
         "--parent_dir",
         type=str,
-        default="data/gdd/enhancer",
+        default="data/enhancer",
         help="Path to the parent directory where model checkpoints and outputs are saved",
     )
     parser.add_argument(
@@ -32,7 +32,7 @@ def main():
     parser.add_argument(
         "--pfg",
         help="If true, train with classifier-free guidance",
-        action="store_true",
+        action="store_false",
     )
     parser.add_argument(
         "--fbd", help="If true, compute fbd at train time", action="store_true"
@@ -77,6 +77,7 @@ def main():
         train_fbd=train_fbd,
         distill_data_path=distill_data_path,
         discrete_time=discrete_time,
+        device="cuda" if torch.cuda.is_available() else "cpu",
     )
     # Configs for evaluation
     eval_cfg = get_enhancer_config(
@@ -115,8 +116,8 @@ def main():
         )
     else:
         # Use training and validation datasets
-        train_dataset = EnhancerDataset(cfg, split="train")
-        valid_dataset = EnhancerDataset(eval_cfg, split="valid")
+        train_dataset = EnhancerDataset(cfg, split="train", n_seqs=20)
+        valid_dataset = EnhancerDataset(eval_cfg, split="valid", n_seqs=20)
 
     train_dataloader = torch.utils.data.DataLoader(
         train_dataset, batch_size=cfg.training.batch_size, shuffle=True, num_workers=0

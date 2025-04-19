@@ -15,6 +15,7 @@ def get_enhancer_config(
     use_tag=True,
     discrete_time=False,
     num_timesteps=100,
+    device="cpu",
 ):
     """
     Config for training and evaluating on enhancer dataset
@@ -71,7 +72,7 @@ def get_enhancer_config(
     config.save_location = save_dir
     config.state = state
     config.init_model_path = None
-    config.device = "cuda"
+    config.device = device
     config.distributed = False
     config.num_gpus = 1
     config.eps_ratio = 1e-9

@@ -1,0 +1,12 @@
+numpy
+matplotlib
+pandas
+scipy
+tqdm
+jupyter
+seaborn
+torch
+torchvision
+tensorboard
+torchmetrics
+ml-collections

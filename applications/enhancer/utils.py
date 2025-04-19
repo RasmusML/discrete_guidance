@@ -358,12 +358,18 @@ def train_model_on_dataset(
                         accuracy_metric(probs, labels)
                         auprc_metric(probs, labels)
 
+                perplexity = np.exp(eval_output["loss"])
+                batch_valid_output["perplexity"].append(perplexity)
+
+
             ## Log metrics for the epoch
             for k, v in batch_valid_output.items():
                 if k not in ["embeds_data", "logits"]:
                     avg = np.mean(np.array(v))
                     epoch_valid_output[k].append(avg)
                     writer.add_scalar(f"{k}/valid", avg, epoch)
+
+                print(f"Validation {k}: {avg:.4f}")
 
             # Additional metrics for clean classifier
             if which_model != "denoising":
