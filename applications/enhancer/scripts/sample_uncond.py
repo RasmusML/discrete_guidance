@@ -139,6 +139,7 @@ def main():
         x1_temp=x1_temp,
         do_purity_sampling=do_purity_sampling,
         purity_temp=purity_temp,
+        argmax_sample=True,
     )
 
     if use_classifier:

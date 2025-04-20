@@ -31,6 +31,7 @@ def flow_matching_sampling(
     purity_temp: float = 1.0,
     num_unpadded_freq_dict: Optional[dict[int, float]] = None,
     eps: float = 1e-9,
+    argmax_sample: bool = True,
 ):
     """
     Generates samples using flow matching with optional predictor or predictor-free guidance.
@@ -103,6 +104,7 @@ def flow_matching_sampling(
             purity_temp=purity_temp,
             num_unpadded_freq_dict=num_unpadded_freq_dict,
             eps=eps,
+            argmax_sample=argmax_sample,
         )
         samples.append(x1)
         counter += batch_size
@@ -140,6 +142,7 @@ def flow_matching_sampling_masking_euler(
     purity_temp: float = 1.0,
     num_unpadded_freq_dict: Optional[dict[int, float]] = None,
     eps: float = 1e-9,
+    argmax_sample: bool = True,
 ) -> np.ndarray:
     """
     Generates samples using Euler integration of the discrete flow matching model with optional guidance.
@@ -327,7 +330,11 @@ def flow_matching_sampling_masking_euler(
 
         # Sample the next xt
         try:
-            xt = torch.distributions.Categorical(step_probs).sample()  # (B, D)
+            # sample argmax from step probs. Not categorical
+            if argmax_sample:
+                xt = torch.argmax(step_probs, dim=-1)
+            else:
+                xt = torch.distributions.Categorical(step_probs).sample()  # (B, D)
         except ValueError:
             raise ValueError(
                 "ValueError in 'torch.distributions.Categorical(step_probs).sample()', step_probs might not valid."
