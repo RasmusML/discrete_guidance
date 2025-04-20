@@ -32,10 +32,12 @@ def main():
     parser.add_argument(
         "--pfg",
         help="If true, train with classifier-free guidance",
-        action="store_false",
+        action="store_true",
+        default=False,
     )
     parser.add_argument(
-        "--fbd", help="If true, compute fbd at train time", action="store_true"
+        "--fbd", help="If true, compute fbd at train time", action="store_true",
+        default=False,
     )
     parser.add_argument(
         "--distill_data_path",
@@ -81,9 +83,11 @@ def main():
     )
     # Configs for evaluation
     eval_cfg = get_enhancer_config(
-        parent_dir=parent_dir, state="eval", which_model=which_model
+        parent_dir=parent_dir, state="eval", which_model=which_model,
+        device="cuda" if torch.cuda.is_available() else "cpu",
     )
     device = cfg.device
+    print(f"Using device: {device}")
 
     # Set up logging directory
     save_dir, checkpoint_dir, config_dir = bookkeeping.create_experiment_folder(
@@ -116,8 +120,8 @@ def main():
         )
     else:
         # Use training and validation datasets
-        train_dataset = EnhancerDataset(cfg, split="train", n_seqs=20)
-        valid_dataset = EnhancerDataset(eval_cfg, split="valid", n_seqs=20)
+        train_dataset = EnhancerDataset(cfg, split="train", n_seqs=-1)
+        valid_dataset = EnhancerDataset(eval_cfg, split="valid", n_seqs=-1)
 
     train_dataloader = torch.utils.data.DataLoader(
         train_dataset, batch_size=cfg.training.batch_size, shuffle=True, num_workers=0

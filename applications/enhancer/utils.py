@@ -124,6 +124,7 @@ def denoising_model_loss(model, batch_data, cfg):
     model_func = lambda xt, t: model((xt, cls_input), t)
     # Compute loss on batch
     if cfg.discrete_time:
+        print("discrete time")
         batch_loss = digress_utils.d3pm_loss_masking(
             denoising_model=model_func,
             x1=x1,

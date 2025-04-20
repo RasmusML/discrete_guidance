@@ -22,7 +22,7 @@ def main():
     parser.add_argument(
         "--parent_dir",
         type=str,
-        default="discrete_guidance/applications/enhancer/",
+        default="data/enhancer/",
         help="Path to the parent directory where model checkpoints and outputs are saved",
     )
     parser.add_argument(
@@ -47,6 +47,7 @@ def main():
         "--label",
         help="If true, label the generated samples with a clean classifier",
         action="store_true",
+        default=False,
     )
 
     args = parser.parse_args()
@@ -65,6 +66,7 @@ def main():
         which_model="denoising",
         sampler_name=sampler_name,
         dt=dt,
+        device="cuda" if torch.cuda.is_available() else "cpu",
     )
     device = torch.device(eval_cfg.device)
     print(f"Sample from denoising model at {eval_cfg.denoising_model_checkpoint_path}")
@@ -87,18 +89,21 @@ def main():
 
     # Load clean classifier for evaluation
     # and optionally label the generated samples for distillation
-    cls_clean_model_cfg = get_enhancer_config(
-        parent_dir=parent_dir, state="eval", which_model="cls_clean"
-    )
-    cls_clean_model = CNNModel(cls_clean_model_cfg).to(device)
-    # The ckpt from DFM has an extra 'model.' in each key
-    # We rename the state dict so we can load into CNNModel
-    cls_ckpt = torch.load(eval_cfg.cls_clean_model_checkpoint_path)
-    state_dict = dict()
-    for k, v in cls_ckpt["state_dict"].items():
-        new_k = k[6:]
-        state_dict[new_k] = v
-    cls_clean_model.load_state_dict(state_dict)
+    use_classifier = False
+
+    if use_classifier:
+        cls_clean_model_cfg = get_enhancer_config(
+            parent_dir=parent_dir, state="eval", which_model="cls_clean"
+        )
+        cls_clean_model = CNNModel(cls_clean_model_cfg).to(device)
+        # The ckpt from DFM has an extra 'model.' in each key
+        # We rename the state dict so we can load into CNNModel
+        cls_ckpt = torch.load(eval_cfg.cls_clean_model_checkpoint_path)
+        state_dict = dict()
+        for k, v in cls_ckpt["state_dict"].items():
+            new_k = k[6:]
+            state_dict[new_k] = v
+        cls_clean_model.load_state_dict(state_dict)
 
     # Parse sampling configs
     S = eval_cfg.data.S
@@ -135,8 +140,11 @@ def main():
         do_purity_sampling=do_purity_sampling,
         purity_temp=purity_temp,
     )
-    metrics = utils.print_eval_metrics(samples, cls_clean_model, eval_cfg)
-    writer.add_text("Uncond FBD", f"FBD(uncond): {metrics['fbd_uncond']}")
+
+    if use_classifier:
+        metrics = utils.print_eval_metrics(samples, cls_clean_model, eval_cfg)
+        writer.add_text("Uncond FBD", f"FBD(uncond): {metrics['fbd_uncond']}")
+    
     if label_samples:
         labels = utils.get_labels_from_cls_labeler_model(samples, cls_clean_model)
         with open(os.path.join(save_dir, f"samples_uncond-labeled.npz"), "wb") as f:
